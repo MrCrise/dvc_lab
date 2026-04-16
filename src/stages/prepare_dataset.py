@@ -28,7 +28,7 @@ def clear_data(path2data):
 
 def scale_frame(frame):
     df = frame.copy()
-    X,y = df.drop(columns = ['Price(euro)']), df['Price(euro)']
+    X,y = df.drop(columns = ['charges']), df['charges']
     scaler = StandardScaler()
     power_trans = PowerTransformer()
     X_scale = scaler.fit_transform(X.values)

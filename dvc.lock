@@ -5,17 +5,17 @@ stages:
     deps:
     - path: src/config.yaml
       hash: md5
-      md5: 0bcc9702277779e67d13a3e5d229eab3
-      size: 485
+      md5: 3af11a43dcc9e1a64846eac0a8d3ae09
+      size: 472
     - path: src/stages/prepare_dataset.py
       hash: md5
-      md5: d97090c1e17bc47091f8178b7ef34cfd
-      size: 3206
+      md5: eb0cefaf06b79544237f850ddbc526b6
+      size: 1703
     outs:
     - path: ./data/final.csv
       hash: md5
-      md5: 7852d6b8bd9357d63aece48a66904ce6
-      size: 3058352
+      md5: 92fb7525f9d30f1ed3ec7e803e987b63
+      size: 53008
   data_split:
     cmd: python src/stages/data_splite.py
     deps:
