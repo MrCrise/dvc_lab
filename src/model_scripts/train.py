@@ -12,7 +12,6 @@ import joblib
 from sklearn.pipeline import Pipeline
 import pickle
 from sklearn.pipeline import make_pipeline
-from src.model_scripts.plot_model import vis_weigths
 from sklearn.ensemble import ExtraTreesRegressor
 
 def eval_metrics(actual, pred):
