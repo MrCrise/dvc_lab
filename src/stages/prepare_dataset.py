@@ -17,42 +17,13 @@ def load_config(config_path):
 
 def clear_data(path2data):
     df = pd.read_csv(path2data)
-    cat_columns = ['Make', 'Model', 'Style', 'Fuel_type', 'Transmission']
-    num_columns = ['Year', 'Distance', 'Engine_capacity(cm3)', 'Price(euro)']
+    df = df.drop_duplicates().dropna()
     
-    question_dist = df[(df.Year <2021) & (df.Distance < 1100)]
-    df = df.drop(question_dist.index)
-    # Анализ и очистка данных
-    # анализ гистограмм
-    question_dist = df[(df.Distance > 1e6)]
-    df = df.drop(question_dist.index)
-    
-    # здравый смысл
-    question_engine = df[df["Engine_capacity(cm3)"] < 200]
-    df = df.drop(question_engine.index)
-    
-    # здравый смысл
-    question_engine = df[df["Engine_capacity(cm3)"] > 5000]
-    df = df.drop(question_engine.index)
-    
-    # здравый смысл
-    question_price = df[(df["Price(euro)"] < 101)]
-    df = df.drop(question_price.index)
-    
-    # анализ гистограмм
-    question_price = df[df["Price(euro)"] > 1e5]
-    df = df.drop(question_price.index)
-    
-    #анализ гистограмм
-    question_year = df[df.Year < 1971]
-    df = df.drop(question_year.index)
-    
-    df = df.reset_index(drop=True)  
+    df = df[df['bmi'] < 55] # Убираем экстремальный ИМТ.
+
+    cat_columns = ['sex', 'smoker', 'region']
     ordinal = OrdinalEncoder()
-    ordinal.fit(df[cat_columns])
-    Ordinal_encoded = ordinal.transform(df[cat_columns])
-    df_ordinal = pd.DataFrame(Ordinal_encoded, columns=cat_columns)
-    df[cat_columns] = df_ordinal[cat_columns]
+    df[cat_columns] = ordinal.fit_transform(df[cat_columns])
     return df
 
 def scale_frame(frame):
@@ -65,19 +36,14 @@ def scale_frame(frame):
     return X_scale, Y_scale, power_trans
 
 def featurize(dframe, config) -> None:
-    """
-        Генерация новых признаков
-    """
+    """Генерация новых признаков."""
+
     logger = get_logger('FEATURIZE')
-    logger.info('Create features')
-    dframe['Distance_by_year'] = dframe['Distance']/(2022 - dframe['Year'])
-    dframe['age'] = 2024 - dframe['Year']
-    mean_engine_cap = dframe.groupby('Style')['Engine_capacity(cm3)'].mean()
-    dframe['eng_cap_diff'] = dframe.apply(lambda row: abs(row['Engine_capacity(cm3)'] - mean_engine_cap[row['Style']]), axis=1)
+    logger.info('Create features for Insurance')
 
-    max_engine_cap = dframe.groupby('Style')['Engine_capacity(cm3)'].max()
-    dframe['eng_cap_diff_max'] = dframe.apply(lambda row: abs(row['Engine_capacity(cm3)'] - max_engine_cap[row['Style']]), axis=1)
-
+    dframe['is_obese'] = (dframe['bmi'] > 30).astype(int)
+    dframe['age_smoker'] = dframe['age'] * dframe['smoker']
+    
     features_path = config['featurize']['features_path']
     dframe.to_csv(features_path, index=False)
 

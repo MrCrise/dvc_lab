@@ -27,15 +27,15 @@ def train(config):
     print(df_train.shape)
 
 
-    X_train,y_train = df_train.drop(columns = ['Price(euro)']).values, df_train['Price(euro)'].values
-    X_val, y_val = df_test.drop(columns = ['Price(euro)']).values, df_test['Price(euro)'].values
+    X_train,y_train = df_train.drop(columns = ['charges']).values, df_train['charges'].values
+    X_val, y_val = df_test.drop(columns = ['charges']).values, df_test['charges'].values
     power_trans = PowerTransformer()
     y_train = power_trans.fit_transform(y_train.reshape(-1,1))
     y_val = power_trans.transform(y_val.reshape(-1,1))
     
 
     
-    mlflow.set_experiment("linear model cars")
+    mlflow.set_experiment("Insurance linear model")
     with mlflow.start_run():
         if config['train']['model_type'] == "tree":
             lr_pipe = Pipeline(steps=[('scaler',StandardScaler()),

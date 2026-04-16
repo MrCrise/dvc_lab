@@ -1,11 +1,11 @@
 data_load:
-  dataset_csv: "data/cars.csv"
+  dataset_csv: "data/insurance.csv"
 featurize:
   features_path: "data/final.csv"
 data_split:
   test_size: 0.3
-  trainset_path: "data/train_cars.csv"
-  testset_path: "data/test_cars.csv"
+  trainset_path: "data/train.csv"
+  testset_path: "data/test.csv"
 train:
   cv: 4
   model_type: "tree"
@@ -16,5 +16,5 @@ train:
 test:
   model_path: "models/cars.joblib"
   power_path: "models/power.joblib"
-  testset_path: "data/test_cars.csv"
+  testset_path: "data/test.csv"
   
