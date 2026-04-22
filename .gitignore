@@ -1,0 +1,17 @@
+# MLflow
+mlruns/
+mlflow.db
+
+# DVC
+/data/*.csv
+/models/*.joblib
+/models/*.pkl
+
+# Метрики и логи
+dvclive/
+.pytest_cache/
+__pycache__/
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
